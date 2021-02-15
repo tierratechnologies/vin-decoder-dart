@@ -3,10 +3,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class NHTSAResult {
-  String value;
-  String valueId;
-  String variable;
-  int variableId;
+  String? value;
+  String? valueId;
+  String? variable;
+  int? variableId;
 
   NHTSAResult({this.value, this.valueId, this.variable, this.variableId});
 
@@ -24,10 +24,10 @@ class NHTSAResult {
 }
 
 class NHTSAVehicleInfo {
-  int count;
-  String message;
-  String searchCriteria;
-  List<NHTSAResult> results;
+  int? count;
+  String? message;
+  String? searchCriteria;
+  List<NHTSAResult>? results;
 
   NHTSAVehicleInfo(
       {this.count, this.message, this.searchCriteria, this.results});
@@ -37,24 +37,24 @@ class NHTSAVehicleInfo {
     message = json['Message'];
     searchCriteria = json['SearchCriteria'];
     if (json['Results'] != null) {
-      results = List<NHTSAResult>();
+      results = [];
       json['Results'].forEach((v) {
         if (v['Value'] != null) {
-          results.add(NHTSAResult.fromJson(v));
+          results!.add(NHTSAResult.fromJson(v));
         }
       });
     }
   }
 
-  static String normalizeStringValue(String s) {
-    return s.splitMapJoin(' ',
+  static String? normalizeStringValue(String? s) {
+    return s?.splitMapJoin(' ',
         onNonMatch: (m) => StringUtils.capitalize(m.toLowerCase()));
   }
 
   ExtendedVehicleInfo toExtendedVehicleInfo() {
     final ExtendedVehicleInfo info = ExtendedVehicleInfo();
 
-    results.forEach((f) {
+    results?.forEach((f) {
       switch (f.variable) {
         case "Vehicle Type":
           info.vehicleType = normalizeStringValue(f.value);
@@ -78,11 +78,11 @@ class NHTSAVehicleInfo {
 }
 
 class ExtendedVehicleInfo {
-  String make;
-  String model;
-  String vehicleType;
+  String? make;
+  String? model;
+  String? vehicleType;
 
-  static Future<ExtendedVehicleInfo> getExtendedVehicleInfo(String vin) async {
+  static Future<ExtendedVehicleInfo?> getExtendedVehicleInfo(String vin) async {
     var path = 'https://vpic.nhtsa.dot.gov/api//vehicles/DecodeVin/' +
         vin +
         '?format=json';
