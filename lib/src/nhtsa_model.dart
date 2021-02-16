@@ -1,4 +1,3 @@
-import 'package:basic_utils/basic_utils.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -46,9 +45,15 @@ class NHTSAVehicleInfo {
     }
   }
 
+  static String capitalizeString(String value) {
+    return value.isNotEmpty
+        ? value.replaceRange(0, 1, value[0].toUpperCase())
+        : '';
+  }
+
   static String? normalizeStringValue(String? s) {
     return s?.splitMapJoin(' ',
-        onNonMatch: (m) => StringUtils.capitalize(m.toLowerCase()));
+        onNonMatch: (m) => capitalizeString(m.toLowerCase()));
   }
 
   ExtendedVehicleInfo toExtendedVehicleInfo() {
